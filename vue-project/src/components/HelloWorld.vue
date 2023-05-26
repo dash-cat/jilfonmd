@@ -8,9 +8,10 @@
       <div class="side-bar">
         <div class="search-container">
           <div class="anotation">Поиск сотрудников</div>
-          <input v-model="search" placeholder="Anna" />
+          <input v-model="search" placeholder="Введите Id или имя" />
           <div class="anotation">Результаты</div>
           <div v-if="!searchOfName" class="result-search">ничего не найдено</div>
+          <div v-if="search === ''" class="result-search">начните поиск</div>
           <div class="cards" v-else>
             <div class="box-search"
             @click="pickUser(user)"
@@ -39,10 +40,10 @@
               <img src="../assets/default-img.png" alt="" />
             </div>
             <div class="description">
-              <div class="user-name">{{ selectUser?.username }}</div>
-              <div class="e-mail">{{ selectUser?.email }}</div>
-              <div class="phone">{{ selectUser?.phone }}</div>
-              <div>О себе:</div>
+              <div class="user-name">{{ selectUser?.name }}</div>
+              <div class="user-data"><span>email:</span>&nbsp;{{ selectUser?.email }}</div>
+              <div class="user-data"><span>phone:</span>&nbsp;{{ selectUser?.phone }}</div>
+              <div class="user-title">О себе:</div>
               <div class="user-about">
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit,
                   sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
@@ -78,8 +79,12 @@ export default {
       return this.users.filter((user) => {
         const words = this.search.split(/,[ ]*/)
         for(const word of words) {
-          const kakhochesh = user.username.includes(word)
-          if (kakhochesh) {
+          const id = String(user.id) === String(word)
+          let comparison
+          if (word !== ''){
+            comparison = user.username.includes(word)
+          }
+          if (comparison || id) {
             return true
           }
         }
@@ -136,6 +141,7 @@ $Montserrat: "Montserrat";
   }
 
   .title {
+    font-family: $Montserrat;
     font-weight: 400;
     font-size: 16px;
     line-height: 20px;
@@ -231,6 +237,7 @@ $Montserrat: "Montserrat";
     }
   }
 
+
   .user {
     width: 1266px;
     height: 575px;
@@ -244,6 +251,44 @@ $Montserrat: "Montserrat";
       width: 100%;
       margin-left: 26px;
       margin-top: 33px;
+
+      .description {
+        color: #000000;
+        margin-left: 61px;
+        gap: 10px;
+        display: flex;
+        flex-direction: column;
+      }
+      .user-name {
+      font-family: $Montserrat;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 140%;
+      color: #000000;
+      }
+      .user-data {
+      font-family: $Montserrat;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 140%;
+      color: #333333;
+        span{
+          font-weight: 600;
+        }
+      }
+      .user-title{
+      font-family: 'Montserrat';
+      font-style: normal;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 140%;
+      color: #333333;
+      }
+    }
+    .user-about {
+      width: 439px;
     }
     
   }
