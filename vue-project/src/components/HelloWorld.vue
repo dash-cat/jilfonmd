@@ -10,16 +10,20 @@
           <div class="anotation">Поиск сотрудников</div>
           <input v-model="search" placeholder="Anna" />
           <div class="anotation">Результаты</div>
-          <div v-if="result" class="result-search">ничего не найдено</div>
+          <div v-if="!searchOfName" class="result-search">ничего не найдено</div>
           <div class="cards" v-else>
-            <div class="box-search" v-for="user in searchOfName" :key="user.id">
-              <div>
+            <div class="box-search"
+            @click="pickUser(user)"
+             v-for="user in searchOfName" 
+             :key="user.id"
+            
+             >
+              <div >
                 <img src="../assets/img.png"/>
               </div>
               <div class="name-email">
-                <div class="search-name">{{ user?.name }}</div>
+                <div class="search-name">{{ user?.username }}</div>
                 <div 
-                @click="selectUser()"
                 class="search-email">{{ user?.email }}</div>
               </div>
             </div>
@@ -27,17 +31,26 @@
         </div>
 
         <div class="user">
-          <div v-if="user" class="text-default">
+          <div v-if="!selectUser" class="text-default">
             Выберите сотрудника, чтобы посмотреть его профиль
           </div>
-          <div v-for="user in users" :key="user.id" class="container-info">
+          <div v-if="selectUser" class="container-info">
             <div>
-              <img src="" alt="" />
+              <img src="../assets/default-img.png" alt="" />
             </div>
             <div class="description">
-              <div class="user-name">{{ user?.name }}</div>
-              <div class="e-mail">{{ user?.email }}</div>
-              <div class="user-about">{{ user?.about }}</div>
+              <div class="user-name">{{ selectUser?.username }}</div>
+              <div class="e-mail">{{ selectUser?.email }}</div>
+              <div class="phone">{{ selectUser?.phone }}</div>
+              <div>О себе:</div>
+              <div class="user-about">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                  sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                  nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
+                  reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                  Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt 
+                  mollit anim id est laborum.</div>
             </div>
           </div>
         </div>
@@ -52,7 +65,7 @@ import { store } from "../store";
 export default {
   data() {
     return {
-      selectUser: {},
+      selectUser: null,
       search: "",
       user: {},
     };
@@ -65,7 +78,7 @@ export default {
       return this.users.filter((user) => {
         const words = this.search.split(/,[ ]*/)
         for(const word of words) {
-          const kakhochesh = user.name.includes(word)
+          const kakhochesh = user.username.includes(word)
           if (kakhochesh) {
             return true
           }
@@ -73,6 +86,11 @@ export default {
        return false
       });
     },
+  },
+  methods: {
+    pickUser(user) {
+      this.selectUser = user
+    }
   },
 
   async mounted() {
@@ -83,8 +101,9 @@ export default {
 
 <style lang="scss" scoped>
 $background: #f5f5f5;
+$Montserrat: "Montserrat";
 %title {
-  font-family: "Montserrat";
+  font-family: $Montserrat;
   font-style: normal;
   font-weight: 600;
   font-size: 16px;
@@ -93,10 +112,11 @@ $background: #f5f5f5;
 }
 
 .main-window {
+  font-family: $Montserrat;
   display: flex;
-  width: 100vh;
   background: $background;
   height: 100vh;
+ 
   flex-direction: column;
 
   .info {
@@ -106,12 +126,13 @@ $background: #f5f5f5;
   }
 
   .name-company {
-    font-family: "Montserrat";
+    font-family: $Montserrat;
     font-style: normal;
     font-weight: 700;
     font-size: 32px;
     line-height: 39px;
     color: #e31f24;
+    margin: 46px 0px 30px 0px;
   }
 
   .title {
@@ -216,6 +237,15 @@ $background: #f5f5f5;
     background: #fdfdfd;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
+
+    .container-info {
+      height: 100%;
+      display: flex;
+      width: 100%;
+      margin-left: 26px;
+      margin-top: 33px;
+    }
+    
   }
 }
 </style>
