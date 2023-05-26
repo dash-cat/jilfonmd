@@ -14,11 +14,13 @@
           <div class="cards" v-else>
             <div class="box-search" v-for="user in searchOfName" :key="user.id">
               <div>
-                <img src="../assets/img.svg" alt="" />
+                <img src="../assets/img.png"/>
               </div>
               <div class="name-email">
                 <div class="search-name">{{ user?.name }}</div>
-                <div class="search-email">{{ user?.email }}</div>
+                <div 
+                @click="selectUser()"
+                class="search-email">{{ user?.email }}</div>
               </div>
             </div>
           </div>
@@ -60,7 +62,16 @@ export default {
       users: (state) => state.users,
     }),
     searchOfName() {
-      return this.users.filter((user) => user.name.includes(this.search));
+      return this.users.filter((user) => {
+        const words = this.search.split(/,[ ]*/)
+        for(const word of words) {
+          const kakhochesh = user.name.includes(word)
+          if (kakhochesh) {
+            return true
+          }
+        }
+       return false
+      });
     },
   },
 
