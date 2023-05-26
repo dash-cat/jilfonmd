@@ -1,6 +1,8 @@
 @import './base.css';
 
 #app {
+  background: #FDFDFD;
   color: #76787D;
   width: 1366px;
+  font-family: Montserrat;
 }

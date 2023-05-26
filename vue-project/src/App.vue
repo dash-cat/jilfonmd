@@ -1,24 +1,21 @@
 <template>
   <div id="app" class="main-container">
-    <hello-world/>
+    <table-employees/>
   </div>
 </template>
 
-
 <script type="module">  
-import HelloWorld from './components/HelloWorld.vue'
+import TableEmployees from './components/TableEmployees.vue'
 
 export default {
   components: {
-    'hello-world': HelloWorld
+    TableEmployees
   }
 }
-
 
 </script>
 
 <style lang="scss" scoped>
-
 $background: #F5F5F5;
 .main-container {
   background: $background;

@@ -7,32 +7,30 @@
     <div>
       <div class="side-bar">
         <div class="search-container">
-          <div class="anotation">Поиск сотрудников</div>
-          <input v-model="search" placeholder="Введите Id или имя" />
-          <div class="anotation">Результаты</div>
-          <div v-if="!searchOfName" class="result-search">ничего не найдено</div>
-          <div v-if="search === ''" class="result-search">начните поиск</div>
-          <div class="cards" v-else>
-            <div class="box-search"
-            @click="pickUser(user)"
-             v-for="user in searchOfName" 
-             :key="user.id"
-            
-             >
-              <div >
+          <div class="annotation">Поиск сотрудников</div>
+          <input v-model="searchText" placeholder="Введите Id или имя" />
+          <div class="annotation">Результаты</div>
+          <div v-if="!filteredUsers" class="result-search">ничего не найдено</div>
+          <div v-if="searchText === ''" class="result-search">начните поиск</div>
+          <div v-else class="cards">
+            <div class="card"
+             @click="pickUser(user)"
+             v-for="user in filteredUsers" 
+             :key="user.id">
+              <div>
                 <img src="../assets/img.png"/>
               </div>
-              <div class="name-email">
-                <div class="search-name">{{ user?.username }}</div>
+              <div class="card-name-email">
+                <div class="card-name">{{ user?.username }}</div>
                 <div 
-                class="search-email">{{ user?.email }}</div>
+                class="card-email">{{ user?.email }}</div>
               </div>
             </div>
           </div>
         </div>
 
         <div class="user">
-          <div v-if="!selectUser" class="text-default">
+          <div v-if="!selectUser" class="user-text-default">
             Выберите сотрудника, чтобы посмотреть его профиль
           </div>
           <div v-if="selectUser" class="container-info">
@@ -67,7 +65,7 @@ export default {
   data() {
     return {
       selectUser: null,
-      search: "",
+      searchText: "",
       user: {},
     };
   },
@@ -75,9 +73,9 @@ export default {
     ...mapState({
       users: (state) => state.users,
     }),
-    searchOfName() {
+    filteredUsers() {
       return this.users.filter((user) => {
-        const words = this.search.split(/,[ ]*/)
+        const words = this.searchText.split(/,[ ]*/)
         for(const word of words) {
           const id = String(user.id) === String(word)
           let comparison
@@ -105,7 +103,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$background: #f5f5f5;
+$background: #FDFDFD;
 $Montserrat: "Montserrat";
 %title {
   font-family: $Montserrat;
@@ -120,8 +118,7 @@ $Montserrat: "Montserrat";
   font-family: $Montserrat;
   display: flex;
   background: $background;
-  height: 100vh;
- 
+  height: 100vh;  
   flex-direction: column;
 
   .info {
@@ -156,13 +153,13 @@ $Montserrat: "Montserrat";
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
 
-    .text-default {
+    .user-text-default {
       display: flex;
       align-items: center;
       width: 100%;
       height: 100%;
       justify-content: space-around;
-      font-family: "Montserrat";
+      font-family: $Montserrat;
       font-style: normal;
       font-weight: 400;
       font-size: 14px;
@@ -188,7 +185,7 @@ $Montserrat: "Montserrat";
         padding: 16px 24px;
         gap: 16px;
       }
-      .anotation {
+      .annotation {
         @extend %title;
       }
       .cards {
@@ -197,14 +194,14 @@ $Montserrat: "Montserrat";
         gap: 18px;
         flex-direction: column;
       }
-      .box-search {
+      .card {
         display: flex;
         align-items: center;
         background: #ffffff;
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
         border-radius: 10px;
         cursor: pointer;
-        .name-email {
+        &-name-email {
           width: 100%;
           height: 100%;
           display: flex;
@@ -212,26 +209,27 @@ $Montserrat: "Montserrat";
           flex-direction: column;
           justify-content: space-around;
           padding: 20px;
-          :hover {
-            background: #e0e0e0;
-          }
-
-          .search-name {
-            font-family: "Montserrat";
-            font-style: normal;
-            font-weight: 600;
-            font-size: 14px;
-            line-height: 17px;
-            color: #333333;
-          }
-          .search-email {
-            font-family: "Montserrat";
-            font-style: normal;
-            font-weight: 400;
-            font-size: 14px;
-            line-height: 17px;
-            color: #76787d;
-          }
+        }
+        &-name-email:hover{
+          background: #E0E0E0;
+          box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+          border-radius: 0px 10px 10px 0px;
+        }
+        &-name {
+          font-family: "Montserrat";
+          font-style: normal;
+          font-weight: 600;
+          font-size: 14px;
+          line-height: 17px;
+          color: #333333;
+        }
+        &-email {
+          font-family: "Montserrat";
+          font-style: normal;
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 17px;
+          color: #76787d;
         }
       }
     }
@@ -289,8 +287,7 @@ $Montserrat: "Montserrat";
     }
     .user-about {
       width: 439px;
-    }
-    
+    } 
   }
 }
 </style>
